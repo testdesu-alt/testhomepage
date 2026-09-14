@@ -3,158 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>純手打ちレイトレーシング</title>
+    <title>iPhone 18 Pro - Apple（日本）</title>
     <style>
+        /* Apple標準のフォントシステム */
         body {
+            font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #0f172a;
-            color: white;
-            font-family: sans-serif;
+            background-color: #000000;
+            color: #f5f5f7;
+            overflow-x: hidden;
+        }
+
+        /* 偽のAppleナビゲーションバー */
+        nav {
+            width: 100%;
+            height: 44px;
+            background: rgba(22, 22, 23, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        nav span { cursor: pointer; }
+        nav span:hover { color: #fff; }
+
+        /* メインの紹介エリア */
+        .hero-section {
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
+            align-items: center;
+            text-align: center;
+            padding-top: 44px;
+            box-sizing: border-box;
+            position: relative;
         }
-        h1 { margin-bottom: 5px; font-size: 20px; text-align: center; }
-        p { margin: 0 0 20px 0; font-size: 13px; color: #94a3b8; }
-        canvas {
-            background-color: black;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5);
-            max-width: 100%;
+
+        .tagline {
+            font-size: 24px;
+            font-weight: 600;
+            color: #b4b4b8;
+            margin-bottom: 5px;
         }
+
+        .product-title {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0 0 20px 0;
+            background: linear-gradient(180deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 超美麗なLiquid Glassで表現した新型iPhoneの概念オブジェクト */
+        .iphone-mock {
+            width: 200px;
+            height: 400px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(0, 242, 254, 0.2); /* 謎の未来感ある発光 */
+            position: relative;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        /* 画面内で怪しく光る次世代チップのコア */
+        .iphone-mock::before {
+            content: "ANE X";
+            font-size: 12px;
+            font-weight: bold;
+            color: #00f2fe;
+            letter-spacing: 2px;
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        /* 購入ボタンエリア */
+        .cta-area {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn-buy {
+            background-color: #0071e3;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .btn-buy:hover { background-color: #0077ed; }
+
+        .link-more {
+            color: #2997ff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .link-more:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <h1>純JavaScript レイトレーシング</h1>
-    <p>光の反射、屈折、影（シャドウ）をJavaScriptの数式だけで1ピクセルずつ計算しています</p>
+    <!-- 偽のメニューバー -->
+    <nav>
+        <span></span>
+        <span>Store</span>
+        <span>Mac</span>
+        <span>iPad</span>
+        <span>iPhone</span>
+        <span>Support</span>
+    </nav>
 
-    <!-- ここにレイトレの絵を描画します -->
-    <canvas id="raycanvas" width="500" height="500"></canvas>
+    <!-- メインコンテンツ -->
+    <div class="hero-section">
+        <div class="tagline">まったく新しい、その先へ。</div>
+        <h1 class="product-title">iPhone 18 Pro</h1>
+        
+        <!-- Liquid Glassで浮かぶ未来のiPhone -->
+        <div class="iphone-mock"></div>
 
-    <script>
-        const canvas = document.getElementById('raycanvas');
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-        const imgData = ctx.createImageData(width, height);
+        <div class="cta-area">
+            <a href="#" class="link-more">さらに詳しく ＞</a>
+            <a href="#" class="btn-buy" onclick="alert('予約注文開始中')">購入</a>
+        </div>
+    </div>
 
-        // ベクトルの基本計算ヘルパー
-        const vec3 = (x = 0, y = 0, z = 0) => ({ x, y, z });
-        const add = (v1, v2) => vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
-        const sub = (v1, v2) => vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
-        const scale = (v, s) => vec3(v.x * s, v.y * s, v.z * s);
-        const dot = (v1, v2) => v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-        const length = (v) => Math.sqrt(dot(v, v));
-        const normalize = (v) => { const len = length(v); return len > 0 ? scale(v, 1 / len) : v; };
-
-        // 物体（球体）の定義
-        // type: 0 = マット(不透明), 1 = 金属(鏡面反射), 2 = ガラス(屈折)
-        const spheres = [
-            { center: vec3(0, -1000.5, -1), radius: 1000, color: vec3(0.5, 0.5, 0.5), type: 0 }, // 地面
-            { center: vec3(0, 0, -1.2),     radius: 0.5,  color: vec3(0.1, 0.2, 0.5), type: 2 }, // 中央のガラス球
-            { center: vec3(-1.1, 0, -1.2),  radius: 0.5,  color: vec3(0.8, 0.6, 0.2), type: 1 }, // 左の金属球
-            { center: vec3(1.1, 0, -1.2),   radius: 0.5,  color: vec3(0.7, 0.1, 0.1), type: 0 }  // 右のマット球
-        ];
-
-        // 光源
-        const lightDir = normalize(vec3(1, 1, 0.5));
-
-        // レイ（光線）と球体の衝突判定
-        function hitSphere(center, radius, rayOrigin, rayDir) {
-            const oc = sub(rayOrigin, center);
-            const a = dot(rayDir, rayDir);
-            const b = 2.0 * dot(oc, rayDir);
-            const c = dot(oc, oc) - radius * radius;
-            const discriminant = b * b - 4 * a * c;
-            if (discriminant < 0) return -1.0;
-            return (-b - Math.sqrt(discriminant)) / (2.0 * a);
-        }
-
-        // シーン全体のレイトレーシング関数（再帰的に光を追跡）
-        function traceRay(rayOrigin, rayDir, depth) {
-            if (depth <= 0) return vec3(0, 0, 0); // 反射回数の上限
-
-            let closestT = Infinity;
-            let hitObj = null;
-
-            for (const sphere of spheres) {
-                const t = hitSphere(sphere.center, sphere.radius, rayOrigin, rayDir);
-                if (t > 0.001 && t < closestT) {
-                    closestT = t;
-                    hitObj = sphere;
-                }
-            }
-
-            // 何にも当たらなかったら背景（空のグラデーション）を返す
-            if (!hitObj) {
-                const t = 0.5 * (rayDir.y + 1.0);
-                return add(scale(vec3(1.0, 1.0, 1.0), 1.0 - t), scale(vec3(0.5, 0.7, 1.0), t));
-            }
-
-            // 衝突地点の計算
-            const hitPos = add(rayOrigin, scale(rayDir, closestT));
-            const normal = normalize(sub(hitPos, hitObj.center));
-
-            // --- 質感ごとの光の計算 ---
-            if (hitObj.type === 1) { // 金属（鏡面反射）
-                const reflected = sub(rayDir, scale(normal, 2 * dot(rayDir, normal)));
-                return scale(traceRay(hitPos, normalize(reflected), depth - 1), 0.8);
-            } 
-            else if (hitObj.type === 2) { // ガラス（簡易屈折）
-                const r = sub(rayDir, scale(normal, 2 * dot(rayDir, normal))); // 簡易反射
-                return scale(add(hitObj.color, traceRay(hitPos, normalize(r), depth - 1)), 0.7);
-            }
-            else { // マットな質感（ランダム拡散反射 + シャドウ）
-                const diffuse = Math.max(0, dot(normal, lightDir));
-                
-                // 影の判定（光源に向かってレイを飛ばす）
-                let inShadow = false;
-                for (const sphere of spheres) {
-                    if (sphere === hitObj) continue;
-                    if (hitSphere(sphere.center, sphere.radius, hitPos, lightDir) > 0.001) {
-                        inShadow = true;
-                        break;
-                    }
-                }
-                const shadowFactor = inShadow ? 0.2 : 1.0;
-                const ambient = 0.2;
-                const lighting = Math.min(1.0, ambient + diffuse * shadowFactor);
-                return scale(hitObj.color, lighting);
-            }
-        }
-
-        // メインレンダリングループ
-        function render() {
-            const origin = vec3(0, 0, 0);
-            let index = 0;
-
-            for (let y = height - 1; y >= 0; y--) {
-                for (let x = 0; x < width; x++) {
-                    // 画面座標を3D空間のレイの方向に変換
-                    const u = (x / width) * 2 - 1;
-                    const v = (y / height) * 2 - 1;
-                    const dir = normalize(vec3(u, v, -1));
-
-                    // レイを飛ばして色を取得（最大3回まで光をバウンス）
-                    const color = traceRay(origin, dir, 3);
-
-                    // 画面のピクセルデータに書き込み
-                    imgData.data[index++] = Math.floor(color.x * 255); // R
-                    imgData.data[index++] = Math.floor(color.y * 255); // G
-                    imgData.data[index++] = Math.floor(color.z * 255); // B
-                    imgData.data[index++] = 255;                       // A
-                }
-            }
-            ctx.putImageData(imgData, 0, 0);
-        }
-
-        // レンダリング実行
-        render();
-    </script>
 </body>
 </html>
