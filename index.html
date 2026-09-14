@@ -3,52 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>テスト用ホームページ</title>
+    <title>Liquid Glass テストサイト</title>
     <style>
+        /* 1. 背景のグラデーションアニメーション */
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            overflow: hidden;
+            position: relative;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
+
+        /* 背景で動くカラフルな光の玉（ガラスを透けさせるため） */
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            animation: move 8s infinite alternate ease-in-out;
+        }
+        body::before {
+            background: #ff007f;
+            top: 20%;
+            left: 20%;
+        }
+        body::after {
+            background: #00f2fe;
+            bottom: 20%;
+            right: 20%;
+            animation-delay: -4s;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.2); }
+        }
+
+        /* 2. Liquid Glass（リキッドグラス）の本体 */
+        .glass-card {
+            position: relative;
+            z-index: 10;
+            width: 85%;
+            max-width: 450px;
+            padding: 40px 30px;
             text-align: center;
+            border-radius: 24px; /* 深めの角丸 */
+            
+            /* 背景の透過と強力なすりガラス効果 */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            
+            /* 【最重要】光の反射（ツヤ）を再現する三重のシャドウ */
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.4), /* 外側の影（浮遊感） */
+                inset 0 1px 1px rgba(255, 255, 255, 0.4), /* 上端の強いハイライト */
+                inset 0 -1px 20px rgba(255, 255, 255, 0.05); /* 内側の微小な光 */
+
+            /* 縁をくっきりさせるガラスの境界線 */
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        main {
-            padding: 20px;
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 8px;
+
+        /* 文字のデザイン */
+        h1 {
+            color: #fff;
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
-        h2 {
-            color: #0066cc;
+        p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
         }
+
+        /* ボタンもLiquid Glass風に */
         .btn {
             display: inline-block;
-            padding: 10px 20px;
-            background-color: #0066cc;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
             color: #fff;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 14px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         .btn:hover {
-            background-color: #004499;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>私のテストサイト</h1>
-    </header>
-    <main>
-        <h2>こんにちは！</h2>
-        <p>これはHTMLとCSSで作ったテスト用のホームページです。</p>
-        <a href="#" class="btn">ボタンのテスト</a>
-    </main>
+
+    <!-- このカードがLiquid Glassエフェクトになります -->
+    <div class="glass-card">
+        <h1>Liquid Glass UI</h1>
+        <p>Appleの最新トレンド、Liquid Glass（リキッドグラス）風エフェクトをHTMLとCSSだけで再現しました。ツヤツヤした質感が特徴です。</p>
+        <a href="#" class="btn">タップのテスト</a>
+    </div>
+
 </body>
 </html>
