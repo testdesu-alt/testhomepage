@@ -3,119 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liquid Glass テストサイト</title>
+    <title>純手打ちレイトレーシング</title>
     <style>
-        /* 1. 背景のグラデーションアニメーション */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
+            background-color: #0f172a;
+            color: white;
+            font-family: sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            background: linear-gradient(135deg, #0f172a, #1e1b4b);
+            justify-content: center;
+            min-height: 100vh;
             overflow: hidden;
-            position: relative;
         }
-
-        /* 背景で動くカラフルな光の玉（ガラスを透けさせるため） */
-        body::before, body::after {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 1;
-            animation: move 8s infinite alternate ease-in-out;
-        }
-        body::before {
-            background: #ff007f;
-            top: 20%;
-            left: 20%;
-        }
-        body::after {
-            background: #00f2fe;
-            bottom: 20%;
-            right: 20%;
-            animation-delay: -4s;
-        }
-
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.2); }
-        }
-
-        /* 2. Liquid Glass（リキッドグラス）の本体 */
-        .glass-card {
-            position: relative;
-            z-index: 10;
-            width: 85%;
-            max-width: 450px;
-            padding: 40px 30px;
-            text-align: center;
-            border-radius: 24px; /* 深めの角丸 */
-            
-            /* 背景の透過と強力なすりガラス効果 */
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            
-            /* 【最重要】光の反射（ツヤ）を再現する三重のシャドウ */
-            box-shadow: 
-                0 4px 30px rgba(0, 0, 0, 0.4), /* 外側の影（浮遊感） */
-                inset 0 1px 1px rgba(255, 255, 255, 0.4), /* 上端の強いハイライト */
-                inset 0 -1px 20px rgba(255, 255, 255, 0.05); /* 内側の微小な光 */
-
-            /* 縁をくっきりさせるガラスの境界線 */
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        /* 文字のデザイン */
-        h1 {
-            color: #fff;
-            margin-top: 0;
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-        p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        /* ボタンもLiquid Glass風に */
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 14px;
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
-            transform: translateY(-2px);
+        h1 { margin-bottom: 5px; font-size: 20px; text-align: center; }
+        p { margin: 0 0 20px 0; font-size: 13px; color: #94a3b8; }
+        canvas {
+            background-color: black;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5);
+            max-width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <!-- このカードがLiquid Glassエフェクトになります -->
-    <div class="glass-card">
-        <h1>Liquid Glass UI</h1>
-        <p>Appleの最新トレンド、Liquid Glass（リキッドグラス）風エフェクトをHTMLとCSSだけで再現しました。ツヤツヤした質感が特徴です。</p>
-        <a href="#" class="btn">タップのテスト</a>
-    </div>
+    <h1>純JavaScript レイトレーシング</h1>
+    <p>光の反射、屈折、影（シャドウ）をJavaScriptの数式だけで1ピクセルずつ計算しています</p>
 
+    <!-- ここにレイトレの絵を描画します -->
+    <canvas id="raycanvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.getElementById('raycanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const imgData = ctx.createImageData(width, height);
+
+        // ベクトルの基本計算ヘルパー
+        const vec3 = (x = 0, y = 0, z = 0) => ({ x, y, z });
+        const add = (v1, v2) => vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+        const sub = (v1, v2) => vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+        const scale = (v, s) => vec3(v.x * s, v.y * s, v.z * s);
+        const dot = (v1, v2) => v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+        const length = (v) => Math.sqrt(dot(v, v));
+        const normalize = (v) => { const len = length(v); return len > 0 ? scale(v, 1 / len) : v; };
+
+        // 物体（球体）の定義
+        // type: 0 = マット(不透明), 1 = 金属(鏡面反射), 2 = ガラス(屈折)
+        const spheres = [
+            { center: vec3(0, -1000.5, -1), radius: 1000, color: vec3(0.5, 0.5, 0.5), type: 0 }, // 地面
+            { center: vec3(0, 0, -1.2),     radius: 0.5,  color: vec3(0.1, 0.2, 0.5), type: 2 }, // 中央のガラス球
+            { center: vec3(-1.1, 0, -1.2),  radius: 0.5,  color: vec3(0.8, 0.6, 0.2), type: 1 }, // 左の金属球
+            { center: vec3(1.1, 0, -1.2),   radius: 0.5,  color: vec3(0.7, 0.1, 0.1), type: 0 }  // 右のマット球
+        ];
+
+        // 光源
+        const lightDir = normalize(vec3(1, 1, 0.5));
+
+        // レイ（光線）と球体の衝突判定
+        function hitSphere(center, radius, rayOrigin, rayDir) {
+            const oc = sub(rayOrigin, center);
+            const a = dot(rayDir, rayDir);
+            const b = 2.0 * dot(oc, rayDir);
+            const c = dot(oc, oc) - radius * radius;
+            const discriminant = b * b - 4 * a * c;
+            if (discriminant < 0) return -1.0;
+            return (-b - Math.sqrt(discriminant)) / (2.0 * a);
+        }
+
+        // シーン全体のレイトレーシング関数（再帰的に光を追跡）
+        function traceRay(rayOrigin, rayDir, depth) {
+            if (depth <= 0) return vec3(0, 0, 0); // 反射回数の上限
+
+            let closestT = Infinity;
+            let hitObj = null;
+
+            for (const sphere of spheres) {
+                const t = hitSphere(sphere.center, sphere.radius, rayOrigin, rayDir);
+                if (t > 0.001 && t < closestT) {
+                    closestT = t;
+                    hitObj = sphere;
+                }
+            }
+
+            // 何にも当たらなかったら背景（空のグラデーション）を返す
+            if (!hitObj) {
+                const t = 0.5 * (rayDir.y + 1.0);
+                return add(scale(vec3(1.0, 1.0, 1.0), 1.0 - t), scale(vec3(0.5, 0.7, 1.0), t));
+            }
+
+            // 衝突地点の計算
+            const hitPos = add(rayOrigin, scale(rayDir, closestT));
+            const normal = normalize(sub(hitPos, hitObj.center));
+
+            // --- 質感ごとの光の計算 ---
+            if (hitObj.type === 1) { // 金属（鏡面反射）
+                const reflected = sub(rayDir, scale(normal, 2 * dot(rayDir, normal)));
+                return scale(traceRay(hitPos, normalize(reflected), depth - 1), 0.8);
+            } 
+            else if (hitObj.type === 2) { // ガラス（簡易屈折）
+                const r = sub(rayDir, scale(normal, 2 * dot(rayDir, normal))); // 簡易反射
+                return scale(add(hitObj.color, traceRay(hitPos, normalize(r), depth - 1)), 0.7);
+            }
+            else { // マットな質感（ランダム拡散反射 + シャドウ）
+                const diffuse = Math.max(0, dot(normal, lightDir));
+                
+                // 影の判定（光源に向かってレイを飛ばす）
+                let inShadow = false;
+                for (const sphere of spheres) {
+                    if (sphere === hitObj) continue;
+                    if (hitSphere(sphere.center, sphere.radius, hitPos, lightDir) > 0.001) {
+                        inShadow = true;
+                        break;
+                    }
+                }
+                const shadowFactor = inShadow ? 0.2 : 1.0;
+                const ambient = 0.2;
+                const lighting = Math.min(1.0, ambient + diffuse * shadowFactor);
+                return scale(hitObj.color, lighting);
+            }
+        }
+
+        // メインレンダリングループ
+        function render() {
+            const origin = vec3(0, 0, 0);
+            let index = 0;
+
+            for (let y = height - 1; y >= 0; y--) {
+                for (let x = 0; x < width; x++) {
+                    // 画面座標を3D空間のレイの方向に変換
+                    const u = (x / width) * 2 - 1;
+                    const v = (y / height) * 2 - 1;
+                    const dir = normalize(vec3(u, v, -1));
+
+                    // レイを飛ばして色を取得（最大3回まで光をバウンス）
+                    const color = traceRay(origin, dir, 3);
+
+                    // 画面のピクセルデータに書き込み
+                    imgData.data[index++] = Math.floor(color.x * 255); // R
+                    imgData.data[index++] = Math.floor(color.y * 255); // G
+                    imgData.data[index++] = Math.floor(color.z * 255); // B
+                    imgData.data[index++] = 255;                       // A
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        // レンダリング実行
+        render();
+    </script>
 </body>
 </html>
